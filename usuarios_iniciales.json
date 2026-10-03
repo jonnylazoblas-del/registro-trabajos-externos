@@ -1,0 +1,8 @@
+[
+  {"usuario": "JonnyECC",     "password": "Jonny2030",      "nombre": "Jonny Lazo",          "rol": "admin"},
+  {"usuario": "DianaECC",     "password": "Dianacesop",     "nombre": "Diana Julca",         "rol": "admin"},
+  {"usuario": "SebastianECC", "password": "Sebastiancesop", "nombre": "Sebastian Astudillo", "rol": "admin"},
+  {"usuario": "RogerECC",     "password": "Rogercesop",     "nombre": "Roger Cumpa",         "rol": "admin"},
+  {"usuario": "AngelEntel",   "password": "Angelentel",     "nombre": "Angel Entel",         "rol": "visor"},
+  {"usuario": "ItaloEntel",   "password": "Italoentel",     "nombre": "Italo Entel",         "rol": "visor"}
+]
