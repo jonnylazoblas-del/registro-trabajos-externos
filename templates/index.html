@@ -277,69 +277,21 @@ tbody tr:hover{background:#f5f8fd}
 
 
 .userbar{
-  margin-left:auto;flex:none;
-  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  display:flex;align-items:center;gap:12px;margin-left:auto;
+  flex-wrap:wrap;
 }
 .userbar .uname{
-  font-size:13px;color:#c9d6f2;font-weight:600;white-space:nowrap;
-  padding-right:2px;
+  font-size:12.5px;color:#c9d6f2;font-weight:600;
 }
 .userbar .uname b{color:#fff;font-weight:700}
-.userbar .uname .rol{
-  display:inline-block;margin-left:6px;padding:2px 9px;border-radius:20px;
-  font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
-  background:rgba(255,106,19,.2);color:#ffb487;border:1px solid rgba(255,154,92,.35);
-  vertical-align:1px;
+.userbar a.navlink,.userbar a.logout{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:6px;font-size:12.5px;font-weight:650;
+  color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  text-decoration:none;transition:background .15s;
 }
-.ubtns{display:flex;gap:8px;flex-wrap:nowrap}
-.userbar .ubtn,.userbar a.logout{
-  display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  height:34px;padding:0 13px;border-radius:8px;
-  font:inherit;font-size:12.5px;font-weight:650;white-space:nowrap;
-  color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);
-  text-decoration:none;cursor:pointer;transition:background .15s,border-color .15s;
-}
-.userbar .ubtn:hover,.userbar a.logout:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.4)}
-.userbar .ubtn svg,.userbar a.logout svg{width:15px;height:15px;flex:none}
-.userbar a.logout{background:rgba(255,106,19,.18);border-color:rgba(255,154,92,.45)}
-.userbar a.logout:hover{background:rgba(255,106,19,.32);border-color:rgba(255,154,92,.7)}
-@media(max-width:1000px){
-  .hero .in{flex-wrap:wrap;gap:16px 24px}
-  .ht{flex:1 1 280px;min-width:0}
-  .userbar{margin-left:0;width:100%;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 16px}
-}
-@media(max-width:520px){
-  .ubtns{flex-wrap:wrap;width:100%}
-  .userbar .ubtn,.userbar a.logout{flex:1 1 auto}
-}
-
-/* ── Modales ── */
-input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
-.modal{
-  position:fixed;inset:0;background:rgba(6,26,66,.55);display:none;
-  align-items:center;justify-content:center;padding:20px;z-index:50;
-}
-.modal.on{display:flex}
-.mbox{
-  background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.35);
-  width:100%;max-width:440px;max-height:92vh;overflow:auto;
-  border-top:4px solid var(--or);padding:24px 26px;
-}
-.mbox.wide{max-width:860px}
-.mbox h3{
-  font-size:13px;text-transform:uppercase;letter-spacing:1.1px;color:var(--navy);
-  margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--bd);
-}
-.mbox .field{margin-bottom:14px}
-.mmsg{font-size:13px;font-weight:650;margin-top:12px;min-height:18px}
-.mmsg.err{color:var(--rd)}.mmsg.ok{color:var(--ok)}
-.hint{font-size:11.5px;color:var(--mut);margin-top:5px}
-.utw{overflow-x:auto;border:1px solid var(--bd);border-radius:var(--radius-sm);margin-bottom:18px}
-.utw table{font-size:13px}
-.utw select{padding:6px 8px;width:auto}
-.utw input.unombre{padding:6px 9px;font-size:13px;min-width:170px;border-color:transparent;border-bottom:1px dashed #b5c2dc;background:transparent}
-.utw input.unombre:hover{border-color:#c8d0e0;background:#fff}
-.utw input.unombre:focus{background:#fff}
+.userbar a.navlink:hover,.userbar a.logout:hover{background:rgba(255,255,255,.22)}
+.userbar a.navlink.active{background:rgba(255,106,19,.35);border-color:rgba(255,154,92,.5)}
 
 </style>
 </head>
@@ -352,12 +304,12 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
     <p>Trabajos diarios fuera de la gestión normal de tickets por llamadas: regularizaciones, reprocesos, reportes y más.</p>
   </div>
   <div class="userbar">
-    <span class="uname">Hola, <b>{{ user.nombre }}</b>{% if user.rol == 'visor' %}<span class="rol">solo lectura</span>{% elif user.rol == 'admin' %}<span class="rol">admin</span>{% endif %}</span>
-    <div class="ubtns">
-      {% if user.rol == 'admin' %}<button type="button" class="ubtn" id="btn_users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Usuarios</button>{% endif %}
-      <button type="button" class="ubtn" id="btn_pw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar contraseña</button>
-      <a class="logout" href="{{ url_for('logout') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Cerrar sesión</a>
-    </div>
+    <a class="navlink active" href="{{ url_for('index') }}">Trabajos externos</a>
+    {% if user.can_bitacora %}
+    <a class="navlink" href="{{ url_for('bitacora') }}">Bitácora feedback</a>
+    {% endif %}
+    <span class="uname">Hola, <b>{{ user.nombre }}</b>{% if user.rol == 'visor' %} <span style="opacity:.75">(solo lectura)</span>{% elif user.rol == 'admin' %} <span style="opacity:.75">(admin)</span>{% endif %}</span>
+    <a class="logout" href="{{ url_for('logout') }}">Cerrar sesión</a>
   </div>
 </div></div>
 
@@ -432,52 +384,11 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
 <div class="foot">CESOP Hogar · Entel — Registro de Trabajos Externos<br>
 <span style="display:inline-block;margin-top:4px;opacity:.85">Diseñado y Publicado por Jonny Lazo (CESOP)</span></div>
 
-
-<!-- Modal: cambiar mi contraseña -->
-<div class="modal" id="m_pw"><div class="mbox">
-  <h3>Cambiar mi contraseña</h3>
-  <div class="field"><label for="pw_a">Contraseña actual</label><input type="password" id="pw_a" autocomplete="current-password"></div>
-  <div class="field"><label for="pw_n">Nueva contraseña</label><input type="password" id="pw_n" autocomplete="new-password"><div class="hint">Mínimo 8 caracteres.</div></div>
-  <div class="field"><label for="pw_c">Repetir nueva contraseña</label><input type="password" id="pw_c" autocomplete="new-password"></div>
-  <div class="row"><button class="b1" id="pw_ok" type="button">Guardar contraseña</button><button class="b2" type="button" data-close="m_pw">Cancelar</button></div>
-  <div class="mmsg" id="pw_msg"></div>
-</div></div>
-
-{% if user.rol == 'admin' %}
-<!-- Modal: administrar usuarios -->
-<div class="modal" id="m_users"><div class="mbox wide">
-  <h3>Administrar usuarios</h3>
-  <div class="utw"><table>
-    <thead><tr><th>Usuario</th><th>Nombre (editable)</th><th>Rol</th><th>Activo</th><th>Contraseña</th></tr></thead>
-    <tbody id="u_tb"></tbody>
-  </table></div>
-  <h3 style="margin-top:6px">Nuevo usuario</h3>
-  <div class="grid" style="margin-bottom:14px">
-    <div><label for="u_usuario">Usuario</label><input id="u_usuario" autocomplete="off"></div>
-    <div><label for="u_nombre">Nombre completo</label><input id="u_nombre" autocomplete="off"></div>
-    <div><label for="u_pass">Contraseña inicial</label><input type="password" id="u_pass" autocomplete="new-password"></div>
-    <div><label for="u_rol">Rol</label><select id="u_rol"><option value="usuario">usuario (registra)</option><option value="visor">visor (solo ver y exportar)</option><option value="admin">admin</option></select></div>
-  </div>
-  <div class="row"><button class="b1" id="u_add" type="button">Crear usuario</button><button class="b2" type="button" data-close="m_users">Cerrar</button></div>
-  <div class="mmsg" id="u_msg"></div>
-</div></div>
-
-<!-- Modal: restablecer contraseña de otro usuario -->
-<div class="modal" id="m_reset"><div class="mbox">
-  <h3>Restablecer contraseña</h3>
-  <p style="margin-bottom:14px">Usuario: <b id="rs_user"></b></p>
-  <div class="field"><label for="rs_pass">Nueva contraseña</label><input type="password" id="rs_pass" autocomplete="new-password"><div class="hint">Mínimo 8 caracteres. Comunícasela a la persona; ella podrá cambiarla desde “Cambiar contraseña”.</div></div>
-  <div class="row"><button class="b1" id="rs_ok" type="button">Restablecer</button><button class="b2" type="button" data-close="m_reset">Cancelar</button></div>
-  <div class="mmsg" id="rs_msg"></div>
-</div></div>
-{% endif %}
-
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
   var USER_ROL = {{ user.rol|tojson }};
   var CAN_WRITE = (USER_ROL === 'admin' || USER_ROL === 'usuario');
-  var IS_ADMIN = (USER_ROL === 'admin');
   var P={
    clip:'<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 13h6M9 17h4"/>',
    list:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
@@ -561,7 +472,7 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
       return '<tr><td><b style="color:#0b2a66">'+pad(r.nro)+'</b></td><td>'+esc(r.fecha)+'</td><td>'+esc(r.orden)+'</td><td>'+esc(r.tipoorden)+'</td><td>'+esc(r.codigo)+
       '</td><td>'+esc(r.tiposerv)+'</td><td><span class="tag tp">'+esc(r.tipo)+'</span></td><td>'+esc(r.area)+'</td><td>'+esc(r.resultado)+'</td><td>'+esc(r.accion)+
       '</td><td>'+esc(r.red)+'</td><td><b>'+esc(r.focal)+'</b></td><td>'+esc(r.obs)+
-      '</td><td style="white-space:nowrap">'+(CAN_WRITE&&r.editable?'<button class="edt" data-id="'+esc(r.id)+'" title="Editar">'+ico('edit')+'</button> <button class="del" data-id="'+esc(r.id)+'" title="Eliminar">'+ico('trash')+'</button>':'')+'</td></tr>';
+      '</td><td style="white-space:nowrap">'+(CAN_WRITE?'<button class="edt" data-id="'+esc(r.id)+'" title="Editar">'+ico('edit')+'</button> <button class="del" data-id="'+esc(r.id)+'" title="Eliminar">'+ico('trash')+'</button>':'')+'</td></tr>';
     }).join('');
   }
   function clearForm(){['f_ord','f_tord','f_cod','f_area','f_res','f_acc','f_obs'].forEach(function(i){$(i).value=''});$('f_tserv').value='Hogar';$('f_red').value=''}
@@ -690,7 +601,7 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
         var a=XLSX.utils.sheet_to_json(ws,{header:1,defval:'',raw:true});
         var hi=a.findIndex(function(r){return r.indexOf('Fecha')>=0&&(r.indexOf('Focal')>=0||r.indexOf('Focal Responsable')>=0)});
         if(hi<0)throw 0;
-        var H=a[hi],recs=[];
+        var H=a[hi],add=0;
         for(var i=hi+1;i<a.length;i++){
           var o={};H.forEach(function(h,j){o[h]=a[i][j]});
           var fo=String(o['Focal Responsable']||o['Focal']||'').trim();if(!fo)continue;
@@ -711,90 +622,16 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
             obs:String(o['Observaciones']||'')
           };
           if(!rec.area)rec.area='Importado';
-          recs.push(rec);
+          await api('/api/trabajos',{method:'POST',body:JSON.stringify(rec)});
+          add++;
         }
-        if(!recs.length)throw new Error('El archivo no tiene registros con Focal Responsable.');
-        var res=await api('/api/trabajos/bulk',{method:'POST',body:JSON.stringify({registros:recs})});
         await load();
-        say('✓ '+res.agregados+' importados'+(res.duplicados?' · '+res.duplicados+' duplicados omitidos':'')+(res.invalidos?' · '+res.invalidos+' inválidos':''));
-      }catch(err){say(err&&err.message?err.message:'No se pudo leer el archivo.',true)}
+        say('✓ '+add+' registros importados');
+      }catch(err){say('No se pudo leer el archivo.',true)}
       $('file').value='';
     };
     rd.readAsArrayBuffer(f);
   };
-
-  // ── Modales ──
-  function openM(id){$(id).classList.add('on')}
-  function closeM(id){$(id).classList.remove('on')}
-  function mmsg(id,t,ok){var e=$(id);e.textContent=t||'';e.className='mmsg '+(t?(ok?'ok':'err'):'')}
-  document.querySelectorAll('[data-close]').forEach(function(b){b.onclick=function(){closeM(b.getAttribute('data-close'))}});
-  document.querySelectorAll('.modal').forEach(function(m){m.addEventListener('mousedown',function(ev){if(ev.target===m)m.classList.remove('on')})});
-  document.addEventListener('keydown',function(ev){if(ev.key==='Escape')document.querySelectorAll('.modal.on').forEach(function(m){m.classList.remove('on')})});
-
-  // ── Cambiar mi contraseña ──
-  $('btn_pw').onclick=function(){['pw_a','pw_n','pw_c'].forEach(function(i){$(i).value=''});mmsg('pw_msg','');openM('m_pw');$('pw_a').focus()};
-  $('pw_ok').onclick=async function(){
-    var a=$('pw_a').value,n=$('pw_n').value,c=$('pw_c').value;
-    if(!a||!n){mmsg('pw_msg','Completa todos los campos.');return}
-    if(n.length<8){mmsg('pw_msg','La nueva contraseña debe tener al menos 8 caracteres.');return}
-    if(n!==c){mmsg('pw_msg','Las contraseñas nuevas no coinciden.');return}
-    try{
-      await api('/api/me/password',{method:'POST',body:JSON.stringify({actual:a,nueva:n})});
-      mmsg('pw_msg','✓ Contraseña actualizada.',true);
-      ['pw_a','pw_n','pw_c'].forEach(function(i){$(i).value=''});
-      setTimeout(function(){closeM('m_pw')},1400);
-    }catch(e){mmsg('pw_msg',e.message||'No se pudo cambiar la contraseña.')}
-  };
-  ['pw_a','pw_n','pw_c'].forEach(function(i){$(i).addEventListener('keydown',function(ev){if(ev.key==='Enter')$('pw_ok').click()})});
-
-  // ── Administrar usuarios (admin) ──
-  if(IS_ADMIN){
-    var resetId=null;
-    async function loadUsers(){
-      var us=await api('/api/users');
-      $('u_tb').innerHTML=us.map(function(u){
-        var self=(u.usuario==={{ (user.username|tojson) }});
-        return '<tr><td><b>'+esc(u.usuario)+'</b></td><td><input type="text" class="unombre" maxlength="80" data-uid="'+u.id+'" data-f="nombre" value="'+esc(u.nombre)+'" title="Haz clic para editar el nombre"></td>'+
-          '<td><select data-uid="'+u.id+'" data-f="rol"'+(self?' disabled':'')+'>'+
-            ['admin','usuario','visor'].map(function(r){return '<option'+(r===u.rol?' selected':'')+'>'+r+'</option>'}).join('')+'</select></td>'+
-          '<td style="text-align:center"><input type="checkbox" data-uid="'+u.id+'" data-f="activo"'+(u.activo!==false?' checked':'')+(self?' disabled':'')+'></td>'+
-          '<td><button type="button" class="b2" data-reset="'+u.id+'" data-name="'+esc(u.usuario)+'">Restablecer</button></td></tr>';
-      }).join('');
-    }
-    $('btn_users').onclick=async function(){mmsg('u_msg','');openM('m_users');try{await loadUsers()}catch(e){mmsg('u_msg',e.message)}};
-    $('u_tb').addEventListener('change',async function(ev){
-      var t=ev.target,id=t.getAttribute('data-uid'),f=t.getAttribute('data-f');if(!id||!f)return;
-      var body={};body[f]=(f==='activo')?t.checked:(f==='nombre'?t.value.trim():t.value);
-      try{await api('/api/users/'+id,{method:'PUT',body:JSON.stringify(body)});mmsg('u_msg','✓ Cambio guardado.',true)}
-      catch(e){mmsg('u_msg',e.message);try{await loadUsers()}catch(_){}}
-    });
-    $('u_tb').addEventListener('keydown',function(ev){
-      if(ev.key==='Enter'&&ev.target.getAttribute('data-f')==='nombre'){ev.preventDefault();ev.target.blur()}
-    });
-    $('u_tb').addEventListener('click',function(ev){
-      var b=ev.target.closest('[data-reset]');if(!b)return;
-      resetId=b.getAttribute('data-reset');$('rs_user').textContent=b.getAttribute('data-name');
-      $('rs_pass').value='';mmsg('rs_msg','');openM('m_reset');$('rs_pass').focus();
-    });
-    $('rs_ok').onclick=async function(){
-      var n=$('rs_pass').value;
-      if(n.length<8){mmsg('rs_msg','Mínimo 8 caracteres.');return}
-      try{
-        await api('/api/users/'+resetId+'/password',{method:'PUT',body:JSON.stringify({nueva:n})});
-        mmsg('rs_msg','✓ Contraseña restablecida.',true);$('rs_pass').value='';
-        setTimeout(function(){closeM('m_reset')},1200);
-      }catch(e){mmsg('rs_msg',e.message)}
-    };
-    $('u_add').onclick=async function(){
-      var rec={usuario:$('u_usuario').value.trim(),nombre:$('u_nombre').value.trim(),password:$('u_pass').value,rol:$('u_rol').value};
-      if(!rec.usuario||!rec.nombre||!rec.password){mmsg('u_msg','Completa usuario, nombre y contraseña.');return}
-      try{
-        await api('/api/users',{method:'POST',body:JSON.stringify(rec)});
-        ['u_usuario','u_nombre','u_pass'].forEach(function(i){$(i).value=''});
-        mmsg('u_msg','✓ Usuario creado.',true);await loadUsers();
-      }catch(e){mmsg('u_msg',e.message)}
-    };
-  }
 
   load();
 })();
