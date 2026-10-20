@@ -1,0 +1,66 @@
+══════════════════════════════════════════════════════════════
+  REGISTRO CESOP Hogar · Entel
+  • Trabajos externos
+  • Bitácora de Feedback a Agentes
+  Login + Supabase (tabla usuarios2) + Acceso protegido
+  Diseñado y Publicado por Jonny Lazo (CESOP)
+══════════════════════════════════════════════════════════════
+
+IMPORTANTE
+  Esta app usa la tabla  public.usuarios2
+  NO modifica ni usa     public.usuarios  (tu tabla actual queda intacta)
+
+PASO 1 — CREAR TABLAS EN SUPABASE (una sola vez)
+  1. Supabase → SQL Editor → New query
+  2. Pega TODO el contenido de supabase_schema.sql
+  3. Run
+
+  Crea:
+    • usuarios2
+    • trabajos_externos + trabajos_correlativo
+    • feedback_agentes + feedback_correlativo  (Bitácora)
+  Y deja usuarios listos (admin / visor).
+
+  Si ya tenías las tablas de trabajos, puedes ejecutar solo
+  la sección final del SQL (Bitácora de Feedback a Agentes).
+
+  Evidencias (imágenes/PDF):
+  • Se guardan en Supabase Storage, bucket: bitacora-evidencias
+  • La app intenta crear el bucket automáticamente (público)
+  • También puedes crearlo en Supabase → Storage → New bucket
+    nombre: bitacora-evidencias · Public: sí
+  • Ejecuta también el ALTER de columna evidencias del schema
+    si la tabla feedback_agentes ya existía.
+  Nota: Firebase Storage (BD-cesop) requiere plan Blaze; esta app
+  usa el mismo Supabase del resto del sistema.
+
+PASO 2 — CORRER LA APP
+  pip install -r requirements.txt
+  python app.py
+  → http://127.0.0.1:5050          (Trabajos externos)
+  → http://127.0.0.1:5050/bitacora (Bitácora de feedback)
+
+  En el encabezado hay enlaces para cambiar entre módulos.
+
+USUARIOS INICIALES (después del SQL)
+  ┌──────────────┬────────────────┬─────────────────────┬─────────────────────────────────────┐
+  │ Login        │ Contraseña     │ Nombre              │ Nivel                               │
+  ├──────────────┼────────────────┼─────────────────────┼─────────────────────────────────────┤
+  │ JonnyECC     │ Jonny2030      │ Jonny Lazo          │ ADMIN (puede hacer todo)            │
+  │ DianaECC     │ Dianacesop     │ Diana Julca         │ ADMIN (puede hacer todo)            │
+  │ SebastianECC │ Sebastiancesop │ Sebastian Astudillo │ ADMIN (puede hacer todo)            │
+  │ RogerECC     │ Sebastiancesop │ Roger Cumpa         │ ADMIN (puede hacer todo)            │
+  │ AngelEntel   │ Angelentel     │ Angel Entel         │ VISOR (solo ver y exportar Excel)   │
+  │ ItaloEntel   │ Italoentel     │ Italo Entel         │ VISOR (solo ver y exportar Excel)   │
+  └──────────────┴────────────────┴─────────────────────┴─────────────────────────────────────┘
+
+CREAR MÁS USUARIOS
+  python crear_usuarios.py --listar
+  python crear_usuarios.py --usuario ana --password Clave123 --nombre "Ana Pérez" --rol usuario
+  python crear_usuarios.py --seed
+
+  O por API (logueado como admin):
+    POST /api/users
+    {"usuario":"ana","password":"Clave123","nombre":"Ana Pérez","rol":"usuario"}
+
+══════════════════════════════════════════════════════════════
