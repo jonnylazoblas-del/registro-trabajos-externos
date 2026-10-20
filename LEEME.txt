@@ -1,92 +1,66 @@
 ══════════════════════════════════════════════════════════════
-  REGISTRO DE TRABAJOS EXTERNOS — CESOP Hogar · Entel   (v2)
-  Flask + Supabase · Login con contraseñas cifradas
+  REGISTRO CESOP Hogar · Entel
+  • Trabajos externos
+  • Bitácora de Feedback a Agentes
+  Login + Supabase (tabla usuarios2) + Acceso protegido
   Diseñado y Publicado por Jonny Lazo (CESOP)
 ══════════════════════════════════════════════════════════════
 
-ESTRUCTURA
-  app.py                  servidor
-  crear_usuarios.py       administrar usuarios desde la terminal
-  migrar_passwords.py     solo para migrar desde la versión anterior
-  usuarios_iniciales.json usuarios de arranque (BÓRRALO tras usarlo)
-  requirements.txt        dependencias
-  .env.example            plantilla de configuración  ->  copiar a .env
-  sql/                    scripts para Supabase
-  templates/              index.html, login.html
-  static/                 logo.png
+IMPORTANTE
+  Esta app usa la tabla  public.usuarios2
+  NO modifica ni usa     public.usuarios  (tu tabla actual queda intacta)
 
-QUÉ CAMBIÓ RESPECTO A LA VERSIÓN ANTERIOR
-  • Ya no hay claves en el código: todo va en .env
-  • Contraseñas cifradas (hash). Nunca más en texto plano
-  • NUEVO: "Cambiar contraseña" para cualquier usuario (botón arriba a la derecha)
-  • NUEVO: ventana "Usuarios" para admin: crear, cambiar rol, activar/desactivar
-    y restablecer contraseñas
-  • ID de Atención asignado por la base de datos (sin duplicados ni saltos por error)
-  • Lista completa sin tope de 1000 filas
-  • Importar Excel en una sola operación y omitiendo duplicados exactos
-  • Rol "usuario": solo edita/elimina lo que él registró (admin: todo; visor: solo ver/exportar)
-  • Bloqueo tras 5 intentos fallidos (10 min); sesión revalidada cada 60 s
-    (si desactivas a alguien, pierde el acceso casi de inmediato)
-  • Redirección tras login segura; se puede borrar un usuario sin romper registros
+PASO 1 — CREAR TABLAS EN SUPABASE (una sola vez)
+  1. Supabase → SQL Editor → New query
+  2. Pega TODO el contenido de supabase_schema.sql
+  3. Run
 
-══════════════════════════════════════════════════════════════
- A) PRIMERA VEZ ANTES DE PUBLICAR (importante)
-══════════════════════════════════════════════════════════════
-  1. ROTAR la secret key de Supabase (la anterior quedó expuesta en el código
-     y en chats):  Supabase -> Project Settings -> API Keys -> crear/rotar
-     la secret key y desactivar la anterior.
-  2. cp .env.example .env   y completar SUPABASE_SECRET (la nueva) y SECRET_KEY:
-       python -c "import secrets; print(secrets.token_hex(32))"
-  3. pip install -r requirements.txt
+  Crea:
+    • usuarios2
+    • trabajos_externos + trabajos_correlativo
+    • feedback_agentes + feedback_correlativo  (Bitácora)
+  Y deja usuarios listos (admin / visor).
 
-══════════════════════════════════════════════════════════════
- B) INSTALACIÓN NUEVA (base de datos vacía)
-══════════════════════════════════════════════════════════════
-  1. Supabase -> SQL Editor -> pegar sql/supabase_schema.sql -> Run
-  2. python crear_usuarios.py --seed
-  3. Borrar usuarios_iniciales.json
-  4. python app.py   ->  http://127.0.0.1:5050
+  Si ya tenías las tablas de trabajos, puedes ejecutar solo
+  la sección final del SQL (Bitácora de Feedback a Agentes).
 
-══════════════════════════════════════════════════════════════
- C) YA TENÍA LA VERSIÓN ANTERIOR (conserva tus registros y usuarios)
-══════════════════════════════════════════════════════════════
-  1. Supabase -> SQL Editor -> sql/migracion_paso1.sql -> Run
-  2. python migrar_passwords.py        (convierte las contraseñas a hash)
-  3. Supabase -> SQL Editor -> sql/migracion_paso2.sql -> Run
-     (borra las contraseñas en texto plano)
-  4. Contraseña de RogerECC (ya no comparte la de Sebastian):
-       python crear_usuarios.py --cambiar RogerECC
-     (te la pide por teclado: escribe  Rogercesop)
-  5. python app.py
+  Evidencias (imágenes/PDF):
+  • Se guardan en Supabase Storage, bucket: bitacora-evidencias
+  • La app intenta crear el bucket automáticamente (público)
+  • También puedes crearlo en Supabase → Storage → New bucket
+    nombre: bitacora-evidencias · Public: sí
+  • Ejecuta también el ALTER de columna evidencias del schema
+    si la tabla feedback_agentes ya existía.
+  Nota: Firebase Storage (BD-cesop) requiere plan Blaze; esta app
+  usa el mismo Supabase del resto del sistema.
 
-══════════════════════════════════════════════════════════════
- CAMBIAR CONTRASEÑA
-══════════════════════════════════════════════════════════════
-  • Cada persona:  botón "Cambiar contraseña" (pide la actual y la nueva, mín. 8).
-  • Admin a otra persona:  botón "Usuarios" -> "Restablecer".
-  • Por terminal:  python crear_usuarios.py --cambiar USUARIO
+PASO 2 — CORRER LA APP
+  pip install -r requirements.txt
+  python app.py
+  → http://127.0.0.1:5050          (Trabajos externos)
+  → http://127.0.0.1:5050/bitacora (Bitácora de feedback)
 
-USUARIOS INICIALES (instalación nueva)
-  JonnyECC · DianaECC · SebastianECC · RogerECC  -> admin
-  AngelEntel · ItaloEntel                        -> visor
-  Las contraseñas están en usuarios_iniciales.json. Pide a cada persona
-  que la cambie en su primer ingreso y borra ese archivo.
+  En el encabezado hay enlaces para cambiar entre módulos.
 
-OTROS COMANDOS
+USUARIOS INICIALES (después del SQL)
+  ┌──────────────┬────────────────┬─────────────────────┬─────────────────────────────────────┐
+  │ Login        │ Contraseña     │ Nombre              │ Nivel                               │
+  ├──────────────┼────────────────┼─────────────────────┼─────────────────────────────────────┤
+  │ JonnyECC     │ Jonny2030      │ Jonny Lazo          │ ADMIN (puede hacer todo)            │
+  │ DianaECC     │ Dianacesop     │ Diana Julca         │ ADMIN (puede hacer todo)            │
+  │ SebastianECC │ Sebastiancesop │ Sebastian Astudillo │ ADMIN (puede hacer todo)            │
+  │ RogerECC     │ Sebastiancesop │ Roger Cumpa         │ ADMIN (puede hacer todo)            │
+  │ AngelEntel   │ Angelentel     │ Angel Entel         │ VISOR (solo ver y exportar Excel)   │
+  │ ItaloEntel   │ Italoentel     │ Italo Entel         │ VISOR (solo ver y exportar Excel)   │
+  └──────────────┴────────────────┴─────────────────────┴─────────────────────────────────────┘
+
+CREAR MÁS USUARIOS
   python crear_usuarios.py --listar
-  python crear_usuarios.py --usuario ana --nombre "Ana Pérez" --rol usuario
-  python crear_usuarios.py --desactivar ana      (o --activar ana)
+  python crear_usuarios.py --usuario ana --password Clave123 --nombre "Ana Pérez" --rol usuario
+  python crear_usuarios.py --seed
 
-══════════════════════════════════════════════════════════════
- PUBLICAR EN PRODUCCIÓN
-══════════════════════════════════════════════════════════════
-  Linux/Mac:   gunicorn -w 2 -b 0.0.0.0:5050 app:app
-  Windows:     waitress-serve --port=5050 app:app
-  Con HTTPS:   en .env poner COOKIE_SECURE=1
-  Detrás de nginx/proxy:  TRUST_PROXY=1
-  Nota: el límite de intentos fallidos es por proceso; con varios workers
-  cada uno lleva su propia cuenta (sigue protegiendo).
+  O por API (logueado como admin):
+    POST /api/users
+    {"usuario":"ana","password":"Clave123","nombre":"Ana Pérez","rol":"usuario"}
 
-REGLAS DE CONTRASEÑA
-  Mínimo 8 caracteres y distinta del nombre de usuario.
 ══════════════════════════════════════════════════════════════
