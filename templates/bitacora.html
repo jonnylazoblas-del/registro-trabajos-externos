@@ -354,10 +354,12 @@ input[type=checkbox]{width:auto;padding:0;accent-color:var(--navy2)}
     <p>Registro de retroalimentación, evidencias y seguimiento para la mejora continua del equipo.</p>
   </div>
   <div class="userbar">
+    {% if user.can_bitacora %}<div class="ubtns">
+      <a class="ubtn" href="{{ url_for('index') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Trabajos externos</a>
+      <a class="ubtn active" href="{{ url_for('bitacora') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/></svg>Bitácora feedback</a>
+    </div>{% endif %}
     <span class="uname">Hola, <b>{{ user.nombre }}</b>{% if user.rol == 'visor' %}<span class="rol">solo lectura</span>{% elif user.rol == 'admin' %}<span class="rol">admin</span>{% endif %}</span>
     <div class="ubtns">
-      {% if user.can_bitacora %}<a class="ubtn" href="{{ url_for('index') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Trabajos externos</a>
-      <a class="ubtn active" href="{{ url_for('bitacora') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/></svg>Bitácora feedback</a>{% endif %}
       <button type="button" class="ubtn" id="btn_pw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Cambiar contraseña</button>
       <a class="logout" href="{{ url_for('logout') }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Cerrar sesión</a>
     </div>
